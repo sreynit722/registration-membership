@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f5f4f1">
-    <title>FairPrice Membership</title>
+    <title>FairPrice App</title>
     <style>
         :root {
             color-scheme: light;
@@ -103,6 +103,11 @@
             width: min(520px, 100%);
             margin: 22px auto 0;
             padding: 0 20px 40px;
+        }
+
+        main.app-flow-main {
+            margin-top: 0;
+            padding-top: 24px;
         }
 
         .intro {
@@ -682,6 +687,614 @@
             text-align: center;
         }
 
+        .store-topbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-bottom: 1px solid #edf0f2;
+            color: #344153;
+            font-size: 11px;
+        }
+
+        .store-topbar span {
+            color: #526174;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .store-back {
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: #526174;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .app-store-content {
+            min-height: 450px;
+            padding: 20px;
+        }
+
+        .store-app-row {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .store-icon,
+        .dashboard-app-icon {
+            display: grid;
+            flex: 0 0 auto;
+            place-items: center;
+            border-radius: 12px;
+            background: var(--red);
+            color: white;
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .store-icon {
+            width: 52px;
+            height: 52px;
+        }
+
+        .store-app-info {
+            display: grid;
+            min-width: 0;
+            flex: 1;
+            gap: 4px;
+        }
+
+        .store-app-info strong {
+            font-size: 13px;
+        }
+
+        .store-app-info span {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .store-install {
+            padding: 7px 13px;
+            border: 0;
+            border-radius: 999px;
+            background: #edf1f6;
+            color: #19304c;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .store-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin: 19px 0;
+            padding: 12px 0;
+            border-top: 1px solid #edf0f2;
+            border-bottom: 1px solid #edf0f2;
+            text-align: center;
+        }
+
+        .store-meta span {
+            display: grid;
+            gap: 4px;
+            border-right: 1px solid #edf0f2;
+        }
+
+        .store-meta span:last-child {
+            border-right: 0;
+        }
+
+        .store-meta strong {
+            color: #253347;
+            font-size: 11px;
+        }
+
+        .store-meta small {
+            color: #8a929c;
+            font-size: 8px;
+        }
+
+        .store-preview-title {
+            margin-bottom: 9px;
+            color: #263549;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .store-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .store-preview {
+            display: flex;
+            min-height: 132px;
+            flex-direction: column;
+            justify-content: end;
+            gap: 4px;
+            padding: 9px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .store-preview strong {
+            font-size: 10px;
+            line-height: 1.15;
+        }
+
+        .store-preview span {
+            color: #ffffffd9;
+            font-size: 8px;
+            line-height: 1.25;
+        }
+
+        .reward-preview {
+            background: linear-gradient(155deg, #f21d37, #c60024);
+        }
+
+        .deals-preview {
+            background: linear-gradient(155deg, #1c2c4b, #111b31);
+        }
+
+        .member-preview {
+            background: linear-gradient(155deg, #13866f, #07594b);
+        }
+
+        .app-step-panel .panel-content {
+            min-height: 460px;
+        }
+
+        .app-step-panel .eyebrow {
+            margin-bottom: 14px;
+        }
+
+        .app-step-panel .copy {
+            margin-bottom: 20px;
+        }
+
+        .step-back {
+            align-self: flex-start;
+            margin: -6px 0 10px -7px;
+            padding: 3px 7px;
+            border: 0;
+            background: transparent;
+            color: #4b5968;
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .linked-member {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 23px;
+            padding: 12px;
+            border: 1px solid #eaedf0;
+            border-radius: 8px;
+            background: #f7f8fa;
+        }
+
+        .member-avatar {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            place-items: center;
+            border-radius: 50%;
+            background: #172844;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .linked-name {
+            display: grid;
+            flex: 1;
+            gap: 3px;
+        }
+
+        .linked-name strong {
+            font-size: 11px;
+        }
+
+        .linked-name small {
+            color: #8b939d;
+            font-size: 8px;
+        }
+
+        .linked-badge,
+        .available-pill {
+            padding: 4px 7px;
+            border-radius: 999px;
+            background: #e5f7ef;
+            color: #07885e;
+            font-size: 8px;
+            font-weight: 800;
+        }
+
+        .found-content .reward-note {
+            margin-top: 12px;
+        }
+
+        .reward-unlocked {
+            display: flex;
+            min-height: 465px;
+            border: 0;
+            background: #d90024;
+            color: white;
+        }
+
+        .unlocked-content {
+            display: flex;
+            width: 100%;
+            min-height: 465px;
+            flex-direction: column;
+            padding: 24px;
+            background: radial-gradient(ellipse at 82% 32%, #f52542 0, #e40027 48%, #ca0022 100%);
+        }
+
+        .unlocked-pill {
+            display: inline-flex;
+            align-self: flex-start;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 9px;
+            border: 1px solid #ffffff3a;
+            border-radius: 999px;
+            background: #b90024;
+            color: #ffe5e9;
+            font-size: 9px;
+        }
+
+        .unlocked-content h2 {
+            max-width: 360px;
+            margin: 18px 0 20px;
+            color: white;
+            font-size: 26px;
+            line-height: 1.08;
+        }
+
+        .unlocked-ticket {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 10px;
+            padding: 14px;
+            border-radius: 9px;
+            background: white;
+            color: var(--ink);
+            box-shadow: 0 12px 28px #6d001c33;
+        }
+
+        .unlocked-amount {
+            color: var(--red);
+            font-size: 32px;
+            font-weight: 900;
+        }
+
+        .unlocked-ticket div:nth-child(2) {
+            display: grid;
+            gap: 5px;
+        }
+
+        .unlocked-ticket strong {
+            font-size: 10px;
+        }
+
+        .unlocked-ticket span {
+            color: #808a95;
+            font-size: 8px;
+            line-height: 1.4;
+        }
+
+        .unlocked-ticket .available-pill {
+            color: #07885e;
+            white-space: nowrap;
+        }
+
+        .reward-view-button {
+            width: 100%;
+            min-height: 44px;
+            border: 0;
+            border-radius: 8px;
+            background: white;
+            color: #be0022;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .app-dashboard {
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .dashboard-top {
+            padding: 16px 16px 14px;
+            background: #142441;
+            color: white;
+        }
+
+        .dashboard-appbar {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #dae2ef;
+            font-size: 9px;
+        }
+
+        .dashboard-app-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            font-size: 8px;
+        }
+
+        .notification-dot {
+            width: 7px;
+            height: 7px;
+            margin-left: auto;
+            border: 1px solid white;
+            border-radius: 50%;
+        }
+
+        .dashboard-member-label {
+            margin: 13px 0 4px;
+            color: #aebbd0;
+            font-size: 7px;
+        }
+
+        .dashboard-top h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr 1.1fr;
+            gap: 6px;
+            margin-top: 11px;
+        }
+
+        .dashboard-stats div {
+            display: grid;
+            gap: 3px;
+            padding: 8px;
+            border-radius: 6px;
+            background: #ffffff14;
+        }
+
+        .dashboard-stats strong {
+            font-size: 11px;
+        }
+
+        .dashboard-stats span {
+            color: #c5cede;
+            font-size: 7px;
+        }
+
+        .dashboard-content {
+            display: grid;
+            gap: 10px;
+            padding: 12px;
+            background: white;
+        }
+
+        .dashboard-section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2px;
+            color: #233148;
+            font-size: 10px;
+        }
+
+        .dashboard-section-title button {
+            padding: 3px;
+            border: 0;
+            background: transparent;
+            color: var(--red);
+            cursor: pointer;
+            font-size: 8px;
+        }
+
+        .dashboard-member-card {
+            display: flex;
+            min-height: 62px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 7px 10px;
+            border: 1px solid #e8ebef;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 3px 10px #16233b0d;
+        }
+
+        .dashboard-member-card>div {
+            display: grid;
+            gap: 4px;
+        }
+
+        .dashboard-member-card strong {
+            color: #1d2e48;
+            font-size: 9px;
+        }
+
+        .dashboard-member-card span {
+            color: #8a929c;
+            font-size: 7px;
+        }
+
+        .dashboard-member-card .qr {
+            width: 50px;
+            height: 50px;
+            flex: 0 0 50px;
+            border: 0;
+        }
+
+        .dashboard-reward-card {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border: 1px solid #e8ebef;
+            border-radius: 8px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .reward-icon {
+            display: grid;
+            width: 28px;
+            height: 28px;
+            flex: 0 0 28px;
+            place-items: center;
+            border-radius: 6px;
+            background: var(--red);
+            color: white;
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        .dashboard-reward-card>span:nth-child(2) {
+            display: grid;
+            flex: 1;
+            gap: 4px;
+        }
+
+        .dashboard-reward-card strong {
+            color: #26344a;
+            font-size: 8px;
+        }
+
+        .dashboard-reward-card small {
+            color: #9299a0;
+            font-size: 7px;
+        }
+
+        .dashboard-products {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 7px;
+            overflow: hidden;
+        }
+
+        .dashboard-products article {
+            display: grid;
+            gap: 4px;
+            min-width: 0;
+            color: #28364a;
+            font-size: 8px;
+        }
+
+        .dashboard-products img {
+            width: 100%;
+            height: 52px;
+            border-radius: 6px;
+            background: #edf0f3;
+            object-fit: cover;
+        }
+
+        .dashboard-products span {
+            color: #98a0a9;
+            font-size: 7px;
+        }
+
+        .dashboard-products span b {
+            color: var(--red);
+        }
+
+        .midweek-banner {
+            position: relative;
+            display: grid;
+            gap: 4px;
+            padding: 9px 30px 9px 10px;
+            border: 0;
+            border-radius: 7px;
+            background: #d90024;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .midweek-banner span:first-child {
+            color: #ffccd4;
+            font-size: 7px;
+        }
+
+        .midweek-banner strong {
+            font-size: 9px;
+        }
+
+        .midweek-banner .banner-arrow {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        .dashboard-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f4f6f8;
+        }
+
+        .dashboard-profile div {
+            display: grid;
+            gap: 4px;
+        }
+
+        .dashboard-profile strong {
+            font-size: 11px;
+        }
+
+        .dashboard-profile span,
+        .dashboard-profile small {
+            color: #808a95;
+            font-size: 8px;
+        }
+
+        .app-bottom-nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 7px 5px calc(7px + env(safe-area-inset-bottom));
+            border-top: 1px solid #e9ebee;
+            background: white;
+        }
+
+        .app-bottom-nav button {
+            display: grid;
+            justify-items: center;
+            gap: 3px;
+            padding: 3px 0;
+            border: 0;
+            background: transparent;
+            color: #8e97a1;
+            cursor: pointer;
+            font-size: 7px;
+        }
+
+        .app-bottom-nav button span {
+            font-size: 13px;
+        }
+
+        .app-bottom-nav button.active {
+            color: var(--red);
+        }
+
         .site-footer {
             width: min(440px, 100%);
             margin: 0 auto;
@@ -726,6 +1339,11 @@
                 padding: 0 14px calc(30px + env(safe-area-inset-bottom));
             }
 
+            main.app-flow-main {
+                margin-top: 0;
+                padding-top: calc(16px + env(safe-area-inset-top));
+            }
+
             .intro h1 {
                 font-size: 22px;
             }
@@ -755,6 +1373,48 @@
 
             .otp-row {
                 gap: 6px;
+            }
+
+            .app-store-content {
+                min-height: 430px;
+                padding: 17px;
+            }
+
+            .store-preview {
+                min-height: 118px;
+                padding: 7px;
+            }
+
+            .store-preview strong {
+                font-size: 9px;
+            }
+
+            .store-preview span {
+                font-size: 7px;
+            }
+
+            .unlocked-content {
+                min-height: 430px;
+                padding: 19px;
+            }
+
+            .unlocked-content h2 {
+                font-size: 23px;
+            }
+
+            .unlocked-ticket {
+                grid-template-columns: auto 1fr;
+                padding: 11px;
+            }
+
+            .unlocked-ticket .available-pill {
+                grid-column: 2;
+                justify-self: start;
+            }
+
+            .dashboard-content {
+                gap: 8px;
+                padding: 10px;
             }
         }
 

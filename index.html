@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f4f1">
+    <title>FairPrice Membership</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --red: #d90024;
+            --red-dark: #b9001e;
+            --ink: #17202a;
+            --muted: #78818a;
+            --line: #e6e8eb;
+            --green: #08b783;
+            --font: "Trebuchet MS", "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            background-color: #f5f4f1;
+            background-image: radial-gradient(#deddd8 .7px, transparent .7px);
+            background-size: 16px 16px;
+            font-family: var(--font);
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        .site-header {
+            display: flex;
+            width: min(1120px, 100%);
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 0 auto;
+            padding: 22px 28px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border-radius: 12px;
+            background: var(--red);
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: 0 5px 12px #d9002426;
+        }
+
+        .brand-name {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .brand-caption {
+            margin: 3px 0 0;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .member-badge {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 12px;
+            border: 1px solid #e3e2de;
+            border-radius: 999px;
+            background: #ffffffa8;
+            color: #59636d;
+            font-size: 11px;
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        main {
+            width: min(520px, 100%);
+            margin: 22px auto 0;
+            padding: 0 20px 40px;
+        }
+
+        .intro {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .intro h1 {
+            margin: 0;
+            font-size: 25px;
+            letter-spacing: 0;
+        }
+
+        .intro p {
+            margin: 7px 0 0;
+            color: #737b84;
+            font-size: 13px;
+        }
+
+        .step-count {
+            margin: 0 0 9px;
+            color: #7e8790;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .progress {
+            display: flex;
+            gap: 5px;
+            margin: 0 0 12px;
+        }
+
+        .progress span {
+            height: 3px;
+            flex: 1;
+            border-radius: 4px;
+            background: #dedfe2;
+            transition: background 180ms ease;
+        }
+
+        .progress span.done {
+            background: var(--red);
+        }
+
+        .step-panel {
+            overflow: hidden;
+            border: 1px solid #e5e5e2;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 12px 38px #24303a12;
+            animation: arrive 220ms ease both;
+        }
+
+        .step-panel[hidden] {
+            display: none;
+        }
+
+        .panel-content {
+            display: flex;
+            min-height: 490px;
+            flex-direction: column;
+            padding: 28px 26px 23px;
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            color: #939aa1;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .panel-content h2 {
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.2;
+            letter-spacing: 0;
+        }
+
+        .copy {
+            margin: 9px 0 22px;
+            color: #737d87;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .form-label {
+            display: block;
+            margin: 0 0 7px;
+            color: #303b45;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .phone-field {
+            display: flex;
+            height: 48px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        .phone-field:focus-within,
+        .text-field:focus {
+            border-color: #d85b70;
+            box-shadow: 0 0 0 3px #d9002414;
+        }
+
+        .phone-field select {
+            width: 76px;
+            padding: 0 9px;
+            border: 0;
+            border-right: 1px solid #edf0f2;
+            outline: 0;
+            background: white;
+            color: #59616a;
+            font-size: 12px;
+        }
+
+        .phone-field input {
+            width: 100%;
+            min-width: 0;
+            padding: 0 12px;
+            border: 0;
+            outline: 0;
+            color: var(--ink);
+            font-size: 13px;
+        }
+
+        .text-field {
+            width: 100%;
+            height: 48px;
+            padding: 0 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            outline: 0;
+            background: white;
+            color: var(--ink);
+            font-size: 13px;
+        }
+
+        .helper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 11px;
+            border-radius: 8px;
+            background: #f3f7f5;
+            color: #687970;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .helper-check {
+            color: #079c6c;
+            font-size: 13px;
+        }
+
+        .error {
+            min-height: 14px;
+            margin: 6px 0 0;
+            color: var(--red);
+            font-size: 10px;
+        }
+
+        .spacer {
+            flex: 1;
+            min-height: 26px;
+        }
+
+        .primary {
+            display: flex;
+            width: 100%;
+            min-height: 46px;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--red);
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: background 150ms ease, transform 150ms ease;
+        }
+
+        .primary:hover {
+            background: var(--red-dark);
+        }
+
+        .primary:active {
+            transform: scale(.99);
+        }
+
+        .secondary {
+            width: 100%;
+            margin-top: 9px;
+            padding: 8px;
+            border: 0;
+            background: transparent;
+            color: #58636e;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .link-button {
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: #4e5b68;
+            cursor: pointer;
+            font: inherit;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .invite {
+            padding: 16px;
+            background: #f8f7f4;
+        }
+
+        .poster {
+            display: flex;
+            min-height: 385px;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 12px;
+            background: linear-gradient(155deg, #f21d37 0%, #bd001e 72%, #101c36 72%);
+            color: white;
+            box-shadow: 0 9px 18px #202a3730;
+        }
+
+        .poster-top {
+            padding: 15px 13px 8px;
+        }
+
+        .poster-mark {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            font-size: 7px;
+            box-shadow: none;
+        }
+
+        .poster-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 7px;
+            border: 1px solid #ffffff59;
+            border-radius: 99px;
+            font-size: 8px;
+        }
+
+        .poster h2 {
+            margin: 13px 0 6px;
+            font-size: 23px;
+            line-height: 1.04;
+        }
+
+        .poster p {
+            margin: 0;
+            color: #ffe3e6;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .prices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            margin: 5px 12px 10px;
+        }
+
+        .price {
+            padding: 9px 8px;
+            border-radius: 7px;
+            background: #ac001c;
+        }
+
+        .price.member {
+            transform: rotate(1deg);
+            background: #ffda38;
+            color: #19202a;
+        }
+
+        .price small {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 8px;
+            opacity: .85;
+        }
+
+        .price strong {
+            font-size: 17px;
+        }
+
+        .qr-panel {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            gap: 12px;
+            margin: 0 11px 10px;
+            padding: 11px;
+            border-radius: 9px;
+            background: white;
+            color: var(--ink);
+        }
+
+        .qr {
+            display: block;
+            overflow: hidden;
+            width: 92px;
+            height: 92px;
+            flex: 0 0 92px;
+            padding: 0;
+            border: 1px solid #edf0f3;
+            border-radius: 4px;
+            background: white;
+        }
+
+        .qr svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .qr canvas,
+        .qr img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            image-rendering: pixelated;
+        }
+
+        .qr-unavailable {
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .qr-cell.on {
+            background: #122039;
+        }
+
+        .qr-copy strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .qr-copy span {
+            color: #737b85;
+            font-size: 9px;
+            line-height: 1.45;
+        }
+
+        .poster-foot {
+            padding: 0 10px 12px;
+            color: #cad0dc;
+            font-size: 8px;
+            text-align: center;
+        }
+
+        .otp-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin: 3px 0 11px;
+        }
+
+        .otp-row input {
+            width: 100%;
+            height: 48px;
+            padding: 0;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            outline: 0;
+            color: var(--ink);
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .otp-row input:focus {
+            border-color: var(--red);
+            box-shadow: 0 0 0 3px #d9002414;
+        }
+
+        .fine-print {
+            margin: 0;
+            color: #9299a0;
+            font-size: 10px;
+        }
+
+        .otp-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 12px;
+            color: #64707c;
+            font-size: 10px;
+        }
+
+        .success-mark {
+            display: grid;
+            width: 46px;
+            height: 46px;
+            place-items: center;
+            align-self: center;
+            margin: 8px auto 13px;
+            border: 4px solid #d7f8eb;
+            border-radius: 50%;
+            background: var(--green);
+            color: white;
+            font-size: 21px;
+        }
+
+        .success-title {
+            text-align: center;
+        }
+
+        .member-ticket {
+            margin: 18px 0 12px;
+            padding: 13px;
+            border-radius: 10px;
+            background: #101c36;
+            color: white;
+        }
+
+        .ticket-head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 9px;
+            color: #c7cedb;
+            font-size: 9px;
+        }
+
+        .ticket-name {
+            margin-bottom: 8px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .ticket-qr {
+            width: 132px;
+            height: 132px;
+            margin: 0 auto 9px;
+        }
+
+        .ticket-foot {
+            color: #c7cedb;
+            font-size: 9px;
+            text-align: center;
+        }
+
+        .member-prices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            padding: 10px;
+            border: 1px solid #c5f2e1;
+            border-radius: 9px;
+            background: #ecfbf5;
+        }
+
+        .member-prices span {
+            display: block;
+            color: #6c7a75;
+            font-size: 9px;
+        }
+
+        .member-prices strong {
+            display: block;
+            margin-top: 4px;
+            font-size: 13px;
+        }
+
+        .member-prices .member-price {
+            padding: 6px;
+            border-radius: 6px;
+            background: var(--red);
+            color: white;
+        }
+
+        .member-prices .member-price span,
+        .member-prices .member-price strong {
+            color: white;
+        }
+
+        .reward-hero {
+            margin: -28px -26px 0;
+            padding: 22px 18px 20px;
+            background: linear-gradient(155deg, #172844, #0f1c35);
+            color: white;
+        }
+
+        .reward-tag {
+            display: inline-block;
+            margin-bottom: 11px;
+            padding: 5px 7px;
+            border-radius: 99px;
+            background: #0b735f;
+            color: #baf5df;
+            font-size: 9px;
+        }
+
+        .reward-hero h2 {
+            font-size: 24px;
+        }
+
+        .reward-hero p {
+            margin: 8px 0 0;
+            color: #c7d0df;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .reward-amount {
+            margin: 6px 0 0;
+            color: #ff1436;
+            font-size: 36px;
+            font-weight: 900;
+            text-align: right;
+        }
+
+        .reward-member {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin: -12px 0 12px;
+            padding: 11px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 3px 8px #13223a12;
+            font-size: 9px;
+        }
+
+        .reward-member strong {
+            color: #24344c;
+        }
+
+        .reward-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+        }
+
+        .reward-tile {
+            min-height: 58px;
+            padding: 9px;
+            border: 1px solid #ebedf0;
+            border-radius: 7px;
+            color: #293746;
+            font-size: 9px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .reward-tile b {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--red);
+            font-size: 13px;
+        }
+
+        .reward-note {
+            margin: 12px 0;
+            color: #9299a0;
+            font-size: 9px;
+            text-align: center;
+        }
+
+        .site-footer {
+            width: min(440px, 100%);
+            margin: 0 auto;
+            padding: 0 20px 22px;
+            color: #858b90;
+            font-size: 10px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 2px;
+        }
+
+        @keyframes arrive {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 520px) {
+            .site-header {
+                padding: calc(16px + env(safe-area-inset-top)) 16px 16px;
+            }
+
+            .member-badge {
+                padding: 8px;
+                font-size: 9px;
+            }
+
+            main {
+                margin-top: 18px;
+                padding: 0 14px calc(30px + env(safe-area-inset-bottom));
+            }
+
+            .intro h1 {
+                font-size: 22px;
+            }
+
+            .panel-content {
+                min-height: 510px;
+                padding: 23px 19px 19px;
+            }
+
+            .phone-field select,
+            .phone-field input,
+            .text-field {
+                font-size: 16px;
+            }
+
+            .invite {
+                padding: 12px;
+            }
+
+            .poster {
+                min-height: 370px;
+            }
+
+            .reward-hero {
+                margin: -23px -19px 0;
+            }
+
+            .otp-row {
+                gap: 6px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <header class="site-header">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">FP</div>
+                <div>
+                    <p class="brand-name">FairPrice Membership</p>
+                    <p class="brand-caption">A simpler way to shop for less</p>
+                </div>
+            </div>
+            <div class="member-badge"><span class="badge-dot" aria-hidden="true"></span>Free membership</div>
+        </header>
+
+        <main>
+            <div class="intro">
+                <h1>Join FairPrice Membership</h1>
+                <p>Member prices. One simple sign-up.</p>
+            </div>
+            <p class="step-count" id="stepCount" aria-live="polite">STEP 1 OF 6</p>
+            <div class="progress" aria-hidden="true"><span
+                    class="done"></span><span></span><span></span><span></span><span></span><span></span></div>
+
+            <section class="step-panel invite" data-step="0" aria-label="Membership invitation">
+                <div class="poster">
+                    <div class="poster-top"><span class="poster-tag"><span class="brand-mark"
+                                style="width:16px;height:16px;border-radius:4px;font-size:7px;box-shadow:none">FP</span>
+                            FairPrice Quick Membership</span>
+                        <h2>Join FairPrice Membership</h2>
+                        <p>Unlock Member Prices in less than a minute.</p>
+                    </div>
+                    <div class="prices">
+                        <div class="price"><small>Normal Price</small><strong>$5.00</strong></div>
+                        <div class="price member"><small>Member Price</small><strong>$4.20</strong></div>
+                    </div>
+                    <div class="qr-panel">
+                        <div class="qr" id="joinQr" aria-label="QR code to open membership sign-up"></div>
+                        <div class="qr-copy"><strong>Scan to Join</strong><span>Phone number only.<br>Tap to start your
+                                sign-up.</span></div>
+                    </div>
+                    <div class="poster-foot">No app download needed to become a member</div>
+                </div>
+                <button class="primary" type="button" data-next="1">Join now <span aria-hidden="true">→</span></button>
+            </section>
+
+            <section class="step-panel" data-step="1" aria-label="Enter your phone number" hidden>
+                <div class="panel-content">
+                    <p class="eyebrow">JOIN FAIRPRICE MEMBERSHIP</p>
+                    <h2>Become a Member</h2>
+                    <p class="copy">Just your phone number. No email or password needed.</p>
+                    <label class="form-label" for="phoneNumber">Phone number</label>
+                    <div class="phone-field"><select id="countryCode" aria-label="Country code">
+                            <option>+855</option>
+                            <option>+65</option>
+                            <option>+66</option>
+                            <option>+84</option>
+                        </select><input id="phoneNumber" inputmode="tel" autocomplete="tel-national" value="010 123 456"
+                            aria-describedby="phoneError"></div>
+                    <p class="error" id="phoneError" aria-live="polite"></p>
+                    <div class="helper"><span class="helper-check" aria-hidden="true">✓</span> We use your number to
+                        verify
+                        your membership.</div>
+                    <div class="spacer"></div>
+                    <button class="primary" type="button" data-continue="phone">Continue</button><button
+                        class="secondary" type="button" data-next="0">Back</button>
+                </div>
+            </section>
+
+            <section class="step-panel" data-step="2" aria-label="Verify your phone" hidden>
+                <div class="panel-content">
+                    <p class="eyebrow">JOIN FAIRPRICE MEMBERSHIP</p>
+                    <h2>Verify Your Phone</h2>
+                    <p class="copy">We sent a 6-digit code to <strong id="phonePreview">+855 010 123 456</strong>.</p>
+                    <label class="form-label" for="otp1">Enter 6-digit code</label>
+                    <div class="otp-row" aria-label="One-time verification code"><input id="otp1" inputmode="numeric"
+                            maxlength="1" value="1" aria-label="Digit 1"><input inputmode="numeric" maxlength="1"
+                            value="2" aria-label="Digit 2"><input inputmode="numeric" maxlength="1" value="3"
+                            aria-label="Digit 3"><input inputmode="numeric" maxlength="1" value="4"
+                            aria-label="Digit 4"><input inputmode="numeric" maxlength="1" value="5"
+                            aria-label="Digit 5"><input inputmode="numeric" maxlength="1" value="6"
+                            aria-label="Digit 6">
+                    </div>
+                    <p class="fine-print">Demo code: any 6 digits</p>
+                    <div class="otp-actions"><button class="link-button" type="button" id="resendCode">Resend
+                            code</button><button class="link-button" type="button" data-next="1">Change phone
+                            number</button></div>
+                    <p class="error" id="otpError" aria-live="polite"></p>
+                    <div class="spacer"></div>
+                    <button class="primary" type="button" data-continue="otp">Verify</button>
+                </div>
+            </section>
+
+            <section class="step-panel" data-step="3" aria-label="Add your name" hidden>
+                <div class="panel-content">
+                    <p class="eyebrow">JOIN FAIRPRICE MEMBERSHIP</p>
+                    <h2>Almost Done</h2>
+                    <p class="copy">Your name is optional. You can complete your profile later.</p>
+                    <label class="form-label" for="memberName">Name · Optional</label><input class="text-field"
+                        id="memberName" autocomplete="name" placeholder="Your name">
+                    <p class="error" id="nameError" aria-live="polite"></p>
+                    <div class="spacer"></div>
+                    <button class="primary" type="button" data-continue="name">Create Membership</button><button
+                        class="secondary" type="button" data-next="2">Back</button>
+                </div>
+            </section>
+
+            <section class="step-panel" data-step="4" aria-label="Membership created" hidden>
+                <div class="panel-content">
+                    <div class="success-mark" aria-hidden="true">✓</div>
+                    <h2 class="success-title">You’re now a FairPrice Member!</h2>
+                    <div class="member-ticket">
+                        <div class="ticket-head"><span>Member</span><span>Member ID &nbsp; FP-0234</span></div>
+                        <div class="ticket-name" id="memberNamePreview">Member</div>
+                        <div class="qr ticket-qr" id="memberQr" aria-label="Membership QR code"></div>
+                        <div class="ticket-foot">Contains your phone number. Show this QR at checkout.</div>
+                    </div>
+                    <div class="member-prices">
+                        <div><span>Normal price</span><strong>$5.00</strong></div>
+                        <div class="member-price"><span>Member price</span><strong>$4.20</strong></div>
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="primary" type="button" data-next="5">Continue</button>
+                </div>
+            </section>
+
+            <section class="step-panel" data-step="5" aria-label="Extra app reward" hidden>
+                <div class="panel-content">
+                    <div class="reward-hero"><span class="reward-tag">✓ You’re already a member · FP-0234</span>
+                        <h2>Unlock an Extra $2 Reward</h2>
+                        <p>Download the FairPrice app and sign in with your membership account to unlock your $2 App
+                            Welcome
+                            Reward.</p>
+                        <div class="reward-amount">$2</div>
+                    </div>
+                    <div class="reward-member"><strong>FairPrice App Welcome Reward</strong><span>Member deals</span>
+                    </div>
+                    <div class="reward-grid">
+                        <div class="reward-tile"><b>✳</b>Personalized promotions</div>
+                        <div class="reward-tile"><b>♡</b>Reward wallet</div>
+                        <div class="reward-tile"><b>▤</b>Digital receipts</div>
+                        <div class="reward-tile"><b>⌕</b>Purchase history</div>
+                    </div>
+                    <p class="reward-note">Same phone number · no second registration</p>
+                    <div class="spacer"></div>
+                    <button class="primary" type="button" id="rewardButton">Get the FairPrice app · Unlock
+                        $2</button><button class="secondary" type="button" data-next="4">Maybe Later</button>
+                </div>
+            </section>
+        </main>
+
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>

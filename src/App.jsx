@@ -228,7 +228,7 @@ function VerifyPhoneStep({
             {resendLabel}
           </button>
           <button className="link-button" type="button" onClick={onChangePhone}>
-            Change phone number
+            Back
           </button>
         </div>
         <p className="error" aria-live="polite">
@@ -243,7 +243,35 @@ function VerifyPhoneStep({
   );
 }
 
-function ProfileStep({ name, onNameChange, onCreate, onBack }) {
+function ProfileStep({
+  name,
+  gender,
+  birthDay,
+  birthMonth,
+  birthYear,
+  onNameChange,
+  onGenderChange,
+  onBirthDayChange,
+  onBirthMonthChange,
+  onBirthYearChange,
+  onCreate,
+  onBack,
+}) {
+  const currentYear = new Date().getFullYear();
+  const months = Array.from({ length: 12 }, (_, index) => ({
+    value: String(index + 1).padStart(2, "0"),
+    label: new Intl.DateTimeFormat("en", { month: "long" }).format(
+      new Date(2000, index, 1),
+    ),
+  }));
+  const dayCount = birthMonth
+    ? new Date(
+        Number(birthYear || currentYear),
+        Number(birthMonth),
+        0,
+      ).getDate()
+    : 31;
+
   return (
     <section className="step-panel" aria-label="Add your name">
       <div className="panel-content">
@@ -263,12 +291,77 @@ function ProfileStep({ name, onNameChange, onCreate, onBack }) {
           value={name}
           onChange={onNameChange}
         />
+        <label
+          className="form-label profile-extra-label"
+          htmlFor="memberGender"
+        >
+          Gender
+        </label>
+        <select
+          className="text-field"
+          id="memberGender"
+          value={gender}
+          onChange={onGenderChange}
+        >
+          <option value="" disabled>
+            Select gender
+          </option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+        <label className="form-label profile-extra-label" htmlFor="birthDay">
+          Date of Birth
+        </label>
+        <div className="date-of-birth-fields">
+          <select
+            className="text-field"
+            id="birthDay"
+            aria-label="Day"
+            value={birthDay}
+            onChange={onBirthDayChange}
+          >
+            <option value="">Day</option>
+            {Array.from({ length: dayCount }, (_, index) => {
+              const day = String(index + 1).padStart(2, "0");
+              return (
+                <option value={day} key={day}>
+                  {day}
+                </option>
+              );
+            })}
+          </select>
+          <select
+            className="text-field"
+            aria-label="Month"
+            value={birthMonth}
+            onChange={onBirthMonthChange}
+          >
+            <option value="">Month</option>
+            {months.map((month) => (
+              <option value={month.value} key={month.value}>
+                {month.label}
+              </option>
+            ))}
+          </select>
+          <select
+            className="text-field"
+            aria-label="Year"
+            value={birthYear}
+            onChange={onBirthYearChange}
+          >
+            <option value="">Year</option>
+            {Array.from({ length: 120 }, (_, index) => currentYear - index).map(
+              (year) => (
+                <option value={String(year)} key={year}>
+                  {year}
+                </option>
+              ),
+            )}
+          </select>
+        </div>
         <div className="spacer" />
         <button className="primary" type="button" onClick={onCreate}>
           Create Membership
-        </button>
-        <button className="secondary" type="button" onClick={onCreate}>
-          Skip for Now
         </button>
         <button className="secondary" type="button" onClick={onBack}>
           Back
@@ -278,7 +371,7 @@ function ProfileStep({ name, onNameChange, onCreate, onBack }) {
   );
 }
 
-function MemberCardStep({ name, phone, onContinue, onSaveQr }) {
+function MemberCardStep({ name, phone, onContinue, onSaveQr, onBack }) {
   return (
     <section className="step-panel" aria-label="Membership created">
       <div className="panel-content">
@@ -319,6 +412,9 @@ function MemberCardStep({ name, phone, onContinue, onSaveQr }) {
         </button>
         <button className="secondary" type="button" onClick={onSaveQr}>
           Save QR code image
+        </button>
+        <button className="secondary" type="button" onClick={onBack}>
+          Back
         </button>
       </div>
     </section>
@@ -446,6 +542,7 @@ function AppWelcomeStep({
   onCountryChange,
   onPhoneChange,
   onContinue,
+  onBack,
 }) {
   return (
     <section
@@ -493,6 +590,9 @@ function AppWelcomeStep({
         <div className="spacer" />
         <button className="primary" type="button" onClick={onContinue}>
           Continue
+        </button>
+        <button className="secondary" type="button" onClick={onBack}>
+          Back
         </button>
       </div>
     </section>
@@ -573,7 +673,7 @@ function AppVerifyStep({
   );
 }
 
-function MembershipFoundStep({ name, memberId, onContinue }) {
+function MembershipFoundStep({ name, memberId, onContinue, onBack }) {
   return (
     <section
       className="step-panel app-step-panel"
@@ -601,12 +701,15 @@ function MembershipFoundStep({ name, memberId, onContinue }) {
         <button className="primary" type="button" onClick={onContinue}>
           Continue
         </button>
+        <button className="secondary" type="button" onClick={onBack}>
+          Back
+        </button>
       </div>
     </section>
   );
 }
 
-function RewardUnlockedStep({ onContinue }) {
+function RewardUnlockedStep({ onContinue, onBack }) {
   return (
     <section
       className="step-panel reward-unlocked"
@@ -635,6 +738,9 @@ function RewardUnlockedStep({ onContinue }) {
           onClick={onContinue}
         >
           View My Rewards
+        </button>
+        <button className="secondary" type="button" onClick={onBack}>
+          Back
         </button>
       </div>
     </section>
@@ -667,7 +773,14 @@ function DashboardNavigation({ activeTab, onSelect }) {
   );
 }
 
-function AppDashboardStep({ name, phone, memberId, activeTab, onTabChange }) {
+function AppDashboardStep({
+  name,
+  phone,
+  memberId,
+  activeTab,
+  onTabChange,
+  onBack,
+}) {
   return (
     <section
       className="step-panel app-dashboard"
@@ -821,6 +934,13 @@ function AppDashboardStep({ name, phone, memberId, activeTab, onTabChange }) {
           </>
         )}
       </div>
+      <button
+        className="secondary dashboard-back"
+        type="button"
+        onClick={onBack}
+      >
+        Back
+      </button>
       <DashboardNavigation activeTab={activeTab} onSelect={onTabChange} />
     </section>
   );
@@ -836,6 +956,10 @@ export default function App() {
   const [digits, setDigits] = useState(["1", "2", "3", "4", "5", "6"]);
   const [otpError, setOtpError] = useState("");
   const [memberName, setMemberName] = useState("");
+  const [memberGender, setMemberGender] = useState("");
+  const [birthDay, setBirthDay] = useState("");
+  const [birthMonth, setBirthMonth] = useState("");
+  const [birthYear, setBirthYear] = useState("");
   const [activeTab, setActiveTab] = useState("home");
   const [resendLabel, setResendLabel] = useState("Resend code");
   const inputRefs = useRef([]);
@@ -926,6 +1050,7 @@ export default function App() {
             onCountryChange={(event) => setCountryCode(event.target.value)}
             onPhoneChange={(event) => setPhoneInput(event.target.value)}
             onContinue={continueWithPhone}
+            onBack={() => navigateTo(0)}
           />
         );
         break;
@@ -950,11 +1075,17 @@ export default function App() {
             name={memberName.trim() || "Dara"}
             memberId={memberId}
             onContinue={() => navigateTo(4)}
+            onBack={() => navigateTo(2)}
           />
         );
         break;
       case 4:
-        currentStep = <RewardUnlockedStep onContinue={() => navigateTo(5)} />;
+        currentStep = (
+          <RewardUnlockedStep
+            onContinue={() => navigateTo(5)}
+            onBack={() => navigateTo(3)}
+          />
+        );
         break;
       default:
         currentStep = (
@@ -964,6 +1095,7 @@ export default function App() {
             memberId={memberId}
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            onBack={() => navigateTo(4)}
           />
         );
     }
@@ -1006,7 +1138,15 @@ export default function App() {
         currentStep = (
           <ProfileStep
             name={memberName}
+            gender={memberGender}
+            birthDay={birthDay}
+            birthMonth={birthMonth}
+            birthYear={birthYear}
             onNameChange={(event) => setMemberName(event.target.value)}
+            onGenderChange={(event) => setMemberGender(event.target.value)}
+            onBirthDayChange={(event) => setBirthDay(event.target.value)}
+            onBirthMonthChange={(event) => setBirthMonth(event.target.value)}
+            onBirthYearChange={(event) => setBirthYear(event.target.value)}
             onCreate={completeMembership}
             onBack={() => navigateTo(2)}
           />
@@ -1019,6 +1159,7 @@ export default function App() {
             phone={memberPhone}
             onContinue={() => navigateTo(5)}
             onSaveQr={saveMemberQr}
+            onBack={() => navigateTo(3)}
           />
         );
         break;

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
 
 const totalSteps = 6;
 
@@ -23,16 +23,27 @@ function BrandHeader() {
   );
 }
 
-function QrCode({ value, size, label, className = "" }) {
+function QrCode({ value, size, label, className = "", downloadId }) {
   return (
     <div className={`qr ${className}`} role="img" aria-label={label}>
-      <QRCodeSVG
-        value={value || " "}
-        size={size}
-        bgColor="#ffffff"
-        fgColor="#122039"
-        level="M"
-      />
+      {downloadId ? (
+        <QRCodeCanvas
+          id={downloadId}
+          value={value || " "}
+          size={size}
+          bgColor="#ffffff"
+          fgColor="#122039"
+          level="M"
+        />
+      ) : (
+        <QRCodeSVG
+          value={value || " "}
+          size={size}
+          bgColor="#ffffff"
+          fgColor="#122039"
+          level="M"
+        />
+      )}
     </div>
   );
 }
@@ -261,7 +272,7 @@ function ProfileStep({ name, onNameChange, onCreate, onBack }) {
   );
 }
 
-function MemberCardStep({ name, phone, onContinue }) {
+function MemberCardStep({ name, phone, onContinue, onSaveQr }) {
   return (
     <section className="step-panel" aria-label="Membership created">
       <div className="panel-content">
@@ -280,6 +291,7 @@ function MemberCardStep({ name, phone, onContinue }) {
             value={phone}
             size={132}
             label="Membership QR code generated from your phone number"
+            downloadId="member-qr-canvas"
           />
           <div className="ticket-foot">
             Contains your phone number. Show this QR at checkout.
@@ -298,6 +310,9 @@ function MemberCardStep({ name, phone, onContinue }) {
         <div className="spacer" />
         <button className="primary" type="button" onClick={onContinue}>
           Continue
+        </button>
+        <button className="secondary" type="button" onClick={onSaveQr}>
+          Save QR code image
         </button>
       </div>
     </section>
@@ -350,7 +365,7 @@ function RewardStep({ saved, onSave, onBack }) {
           {saved ? "✓ Reward offer saved" : "Get the FairPrice app · Unlock $2"}
         </button>
         <button className="secondary" type="button" onClick={onBack}>
-          Maybe Later
+          Back
         </button>
       </div>
     </section>
@@ -412,6 +427,16 @@ export default function App() {
     navigateTo(4);
   }
 
+  function saveMemberQr() {
+    const canvas = document.getElementById("member-qr-canvas");
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+
+    const link = document.createElement("a");
+    link.download = "fairprice-member-qr.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }
+
   let currentStep;
   switch (step) {
     case 0:
@@ -463,6 +488,7 @@ export default function App() {
           name={memberName}
           phone={memberPhone}
           onContinue={() => navigateTo(5)}
+          onSaveQr={saveMemberQr}
         />
       );
       break;
